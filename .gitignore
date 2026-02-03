@@ -23,6 +23,7 @@ htmlcov/
 # Allure
 allure-results/
 allure-report/
+results
 
 # Logs & temp
 *.log
