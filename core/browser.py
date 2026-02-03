@@ -8,12 +8,18 @@ from config.settings import settings
 
 def configure_browser() -> None:
     browser.config.base_url = settings.base_url
-    browser.config.window_size = settings.browser_size
     browser.config.timeout = settings.timeout
 
     options = ChromeOptions()
+
     if settings.headless:
         options.add_argument("--headless=new")
+
+    if settings.fullscreen:
+        options.add_argument("--start-maximized")
+    else:
+        browser.config.window_size = settings.browser_size
+
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
 
@@ -21,6 +27,7 @@ def configure_browser() -> None:
 
     if settings.is_remote:
         browser.config.driver_remote_url = settings.remote_url
+
         browser.config.driver_options.set_capability(
             "selenoid:options",
             {
@@ -30,8 +37,12 @@ def configure_browser() -> None:
                 "videoName": settings.video_name,
             },
         )
+
         if settings.browser_version:
-            browser.config.driver_options.set_capability("browserVersion", settings.browser_version)
+            browser.config.driver_options.set_capability(
+                "browserVersion",
+                settings.browser_version,
+            )
 
 
 def open_base_url() -> None:
