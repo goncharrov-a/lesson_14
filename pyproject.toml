@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "rustore-ui-tests"
+version = "0.1.0"
+description = "RuStore UI autotests (QA.GURU homework)"
+authors = ["Goncharov Anton <gonchrv.x@icloud.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.14"
+pytest = "^9.0.2"
+allure-pytest = "^2.15.3"
+python-dotenv = "^1.2.1"
+requests = "^2.32.5"
+selenium = "<4.40.0"
+selene = { version = "^2.0.0rc9", allow-prereleases = true }
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
