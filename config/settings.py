@@ -18,7 +18,6 @@ class Settings:
     base_url: str = os.getenv("BASE_URL", "https://www.rustore.ru")
 
     browser: str = os.getenv("BROWSER", "chrome")
-
     browser_version: str = os.getenv("BROWSER_VERSION", "128.0")
 
     browser_size: str = os.getenv("BROWSER_SIZE", "1920x1080")

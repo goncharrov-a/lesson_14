@@ -25,6 +25,10 @@ def configure_browser() -> None:
 
     browser.config.driver_options = options
 
+    browser.config.driver_options.set_capability("browserName", settings.browser)
+    if settings.browser_version:
+        browser.config.driver_options.set_capability("browserVersion", settings.browser_version)
+
     if settings.is_remote:
         browser.config.driver_remote_url = settings.remote_url
 
@@ -34,14 +38,9 @@ def configure_browser() -> None:
                 "enableVNC": settings.enable_vnc,
                 "enableVideo": settings.enable_video,
                 "name": settings.session_name,
+                "videoName": settings.video_name,  # <-- ВАЖНО
             },
         )
-
-        if settings.browser_version:
-            browser.config.driver_options.set_capability(
-                "browserVersion",
-                settings.browser_version,
-            )
 
 
 def open_base_url() -> None:
