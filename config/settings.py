@@ -18,7 +18,9 @@ class Settings:
     base_url: str = os.getenv("BASE_URL", "https://www.rustore.ru")
 
     browser: str = os.getenv("BROWSER", "chrome")
-    browser_version: str = os.getenv("BROWSER_VERSION", "")
+
+    browser_version: str = os.getenv("BROWSER_VERSION", "128.0")
+
     browser_size: str = os.getenv("BROWSER_SIZE", "1920x1080")
     headless: bool = _get_bool("HEADLESS", True)
     fullscreen: bool = _get_bool("FULLSCREEN", False)
@@ -30,8 +32,10 @@ class Settings:
 
     enable_vnc: bool = _get_bool("SELENOID_ENABLE_VNC", True)
     enable_video: bool = _get_bool("SELENOID_ENABLE_VIDEO", True)
+
     session_name: str = os.getenv("SELENOID_SESSION_NAME", "rustore-ui-tests")
     video_name: str = os.getenv("SELENOID_VIDEO_NAME", "video.mp4")
+
     selenoid_ui: str = os.getenv("SELENOID_UI", "")
 
 
