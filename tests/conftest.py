@@ -10,14 +10,15 @@ from core.browser import configure_browser
 def ui_driver(request):
     configure_browser()
     yield
-    # attach при fail
+
     rep = getattr(request.node, "rep_call", None)
+
     if rep and rep.failed:
-        with allure.step("Attach artifacts"):
+        with allure.step("Приложить артефакты"):
             attach.screenshot()
             attach.page_source()
             attach.browser_logs()
-            attach.video_link()
+            attach.video()
 
     browser.quit()
 
@@ -26,5 +27,6 @@ def ui_driver(request):
 def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
+
     if rep.when == "call":
         item.rep_call = rep
