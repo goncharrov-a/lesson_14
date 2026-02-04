@@ -28,15 +28,18 @@ def page_source(name: str = "page_source") -> None:
 
 def browser_logs(name: str = "browser_logs") -> None:
     try:
-        logs = browser.driver.get_log("browser")
+        resp = browser.driver.execute("getLog", {"type": "browser"})
+        logs = resp.get("value", resp)
+
         text = "\n".join(json.dumps(e, ensure_ascii=False) for e in logs)
 
         allure.attach(
-            text,
+            text if text else "Browser logs are empty",
             name=name,
             attachment_type=AttachmentType.TEXT,
             extension=".log",
         )
+
     except Exception as e:
         allure.attach(
             str(e),
