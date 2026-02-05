@@ -50,37 +50,29 @@ def browser_logs(name: str = "browser_logs") -> None:
 
 
 def video(name: str = "video") -> None:
-    try:
-        session_id = browser.driver.session_id
+    session_id = browser.driver.session_id
 
-        if not settings.selenoid_ui:
-            allure.attach(
-                f"session_id={session_id}, set SELENOID_UI to attach video",
-                name=name,
-                attachment_type=AttachmentType.TEXT,
-                extension=".txt",
-            )
-            return
-
-        video_url = f"{settings.selenoid_ui.rstrip('/')}/video/{session_id}.mp4"
-
-        html = (
-            "<html><body><video width='100%' height='100%' controls autoplay>"
-            f"<source src='{video_url}' type='video/mp4'></video>"
-            "</body></html>"
-        )
-
+    if not settings.selenoid_ui:
         allure.attach(
-            html,
-            name=f"{name}_{session_id}",
-            attachment_type=AttachmentType.HTML,
-            extension=".html",
-        )
-
-    except Exception as e:
-        allure.attach(
-            str(e),
+            f"session_id={session_id}, SELENOID_UI is empty",
             name="video_error",
             attachment_type=AttachmentType.TEXT,
             extension=".txt",
         )
+        return
+
+    video_url = f"{settings.selenoid_ui.rstrip('/')}/video/{session_id}.mp4"
+
+    allure.attach(
+        video_url,
+        name="video_url",
+        attachment_type=AttachmentType.TEXT,
+        extension=".txt",
+    )
+
+    html = (
+        "<html><body><video width='100%' height='100%' controls autoplay>"
+        f"<source src='{video_url}' type='video/mp4'></video>"
+        "</body></html>"
+    )
+    allure.attach(html, name=f"{name}_{session_id}", attachment_type=AttachmentType.HTML, extension=".html")

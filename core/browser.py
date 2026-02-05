@@ -23,24 +23,24 @@ def configure_browser() -> None:
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
 
-    browser.config.driver_options = options
-
-    browser.config.driver_options.set_capability("browserName", settings.browser)
+    options.set_capability("browserName", settings.browser)
     if settings.browser_version:
-        browser.config.driver_options.set_capability("browserVersion", settings.browser_version)
+        options.set_capability("browserVersion", settings.browser_version)
 
     if settings.is_remote:
         browser.config.driver_remote_url = settings.remote_url
 
-        browser.config.driver_options.set_capability(
+        options.set_capability(
             "selenoid:options",
             {
                 "enableVNC": settings.enable_vnc,
                 "enableVideo": settings.enable_video,
                 "name": settings.session_name,
-                "videoName": settings.video_name,  # <-- ВАЖНО
+                "videoName": settings.video_name,
             },
         )
+
+    browser.config.driver_options = options
 
 
 def open_base_url() -> None:
