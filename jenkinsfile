@@ -1,0 +1,47 @@
+pipeline {
+  agent any
+
+  environment {
+    SELENOID_HOST = 'selenoid.autotests.cloud'
+    BROWSER_VERSION = '128.0'
+    HEADLESS = 'true'
+    IS_REMOTE = 'true'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Deps') {
+      steps {
+        sh '''
+          python -m pip install -U pip
+          pip install -U poetry
+          poetry env use python3.13
+          poetry install
+        '''
+      }
+    }
+
+    stage('Run tests') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'selenoid', usernameVariable: 'SELENOID_USER', passwordVariable: 'SELENOID_PASS')]) {
+          sh '''
+            export REMOTE_URL="https://${SELENOID_USER}:${SELENOID_PASS}@${SELENOID_HOST}/wd/hub"
+            export SELENOID_UI="https://${SELENOID_HOST}"
+            poetry run pytest -vv --alluredir=results
+          '''
+        }
+      }
+    }
+
+    stage('Allure report') {
+      steps {
+        allure includeProperties: false, jdk: '', results: [[path: 'results']]
+      }
+    }
+  }
+}
