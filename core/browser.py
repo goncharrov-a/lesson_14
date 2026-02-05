@@ -36,7 +36,6 @@ def configure_browser() -> None:
                 "enableVNC": settings.enable_vnc,
                 "enableVideo": settings.enable_video,
                 "name": settings.session_name,
-                "videoName": settings.video_name,
             },
         )
 
