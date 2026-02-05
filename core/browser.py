@@ -41,7 +41,6 @@ def configure_browser() -> None:
         )
 
     browser.config.driver_options = options
-    print("REMOTE_URL =", settings.remote_url)
 
 
 def open_base_url() -> None:
