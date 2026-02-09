@@ -58,7 +58,7 @@ class Settings:
 
     browser_size: str = os.getenv("BROWSER_SIZE", "1920x1080")
     headless: bool = _get_bool("HEADLESS", True)
-    fullscreen: bool = _get_bool("FULLSCREEN", False)
+    fullscreen: bool = _get_bool("FULLSCREEN", True)
     timeout: float = float(os.getenv("TIMEOUT", "5"))
 
     is_remote: bool = _IS_REMOTE
