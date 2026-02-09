@@ -102,13 +102,6 @@ def video(name: str = "video") -> None:
             )
         )
 
-    allure.attach(
-        video_url,
-        name="video_url",
-        attachment_type=AttachmentType.TEXT,
-        extension=".txt",
-    )
-
     html = (
         "<html><body><video width='100%' height='100%' controls autoplay>"
         f"<source src='{video_url}' type='video/mp4'></video>"
