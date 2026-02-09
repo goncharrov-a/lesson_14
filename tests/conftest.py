@@ -30,10 +30,10 @@ def ui_driver(request):
     if rep and rep.failed:
         with allure.step("Приложить артефакты"):
             for name, fn in (
-                ("screenshot", attach.screenshot),
-                ("page_source", attach.page_source),
-                ("browser_logs", attach.browser_logs),
-                ("video", attach.video),
+                    ("screenshot", attach.screenshot),
+                    ("page_source", attach.page_source),
+                    ("browser_logs", attach.browser_logs),
+                    ("video", attach.video),
             ):
                 try:
                     fn()
