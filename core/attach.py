@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlsplit, urlunsplit
 
 import allure
 from allure_commons.types import AttachmentType
@@ -52,16 +53,54 @@ def browser_logs(name: str = "browser_logs") -> None:
 def video(name: str = "video") -> None:
     session_id = browser.driver.session_id
 
-    if not settings.selenoid_ui:
+    if not settings.selenoid_ui and not settings.remote_url:
         allure.attach(
-            f"session_id={session_id}, SELENOID_UI is empty",
+            f"session_id={session_id}, SELENOID_UI and REMOTE_URL are empty",
             name="video_error",
             attachment_type=AttachmentType.TEXT,
             extension=".txt",
         )
         return
 
-    video_url = f"{settings.selenoid_ui.rstrip('/')}/video/{session_id}.mp4"
+    base = settings.selenoid_ui.rstrip("/")
+    userinfo = ""
+
+    if settings.remote_url:
+        remote = urlsplit(settings.remote_url)
+        host = remote.hostname
+        if not base and host:
+            scheme = remote.scheme or "https"
+            base = f"{scheme}://{host}"
+            if remote.port:
+                base += f":{remote.port}"
+
+        if remote.username:
+            userinfo = remote.username
+            if remote.password:
+                userinfo += f":{remote.password}"
+
+    if not base:
+        allure.attach(
+            f"session_id={session_id}, cannot resolve video host",
+            name="video_error",
+            attachment_type=AttachmentType.TEXT,
+            extension=".txt",
+        )
+        return
+
+    public_video_url = f"{base}/video/{session_id}.mp4"
+    video_url = public_video_url
+    if userinfo:
+        parts = urlsplit(public_video_url)
+        video_url = urlunsplit(
+            (
+                parts.scheme,
+                f"{userinfo}@{parts.netloc}",
+                parts.path,
+                parts.query,
+                parts.fragment,
+            )
+        )
 
     allure.attach(
         video_url,
