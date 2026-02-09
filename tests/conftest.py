@@ -29,10 +29,21 @@ def ui_driver(request):
     rep = getattr(request.node, "rep_call", None)
     if rep and rep.failed:
         with allure.step("Приложить артефакты"):
-            attach.screenshot()
-            attach.page_source()
-            attach.browser_logs()
-            attach.video()
+            for name, fn in (
+                ("screenshot", attach.screenshot),
+                ("page_source", attach.page_source),
+                ("browser_logs", attach.browser_logs),
+                ("video", attach.video),
+            ):
+                try:
+                    fn()
+                except Exception as e:
+                    allure.attach(
+                        f"{name} attach failed: {e}",
+                        name=f"{name}_attach_error",
+                        attachment_type=allure.attachment_type.TEXT,
+                        extension=".txt",
+                    )
 
     browser.quit()
 
