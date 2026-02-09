@@ -12,7 +12,7 @@ def configure_browser() -> None:
 
     options = ChromeOptions()
 
-    if settings.headless:
+    if settings.headless and not settings.is_remote:
         options.add_argument("--headless=new")
 
     if settings.fullscreen:
